@@ -23,6 +23,10 @@ FallDown is a game developed using Flutter+Flame+Box2D.
 | :------------: | :------------: | :------------: | :------------: |
 
 
+# 在线预览
+
+http://v.idoo.top/web/fallDown/
+
 # 免责声明
 
 坠落为免费开源软件，仅供学习交流，用户可以非商业性地下载、安装、复制和散发本软件产品。
