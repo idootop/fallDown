@@ -114,7 +114,7 @@ class _MainPageState extends State<MainPage> {
         onWillPop: game?.onWillPop,
         child: Scaffold(
             backgroundColor: Color(0xff000000),
-            body: start ? game.widget : SizedBox()));
+            body: start ? game.widget : Container()));
   }
 }
 

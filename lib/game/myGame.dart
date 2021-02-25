@@ -319,9 +319,14 @@ class MyGame extends Box2DGame
   }
 
   void killAll() {
+    final markComponents = [];
     box.components.forEach((c) => c is Box2DComponent ? null : box.remove(c));
     components
-        .forEach((c) => c is Box2DComponent ? null : components.remove(c));
+        .forEach((c) => c is Box2DComponent ? null : markComponents.add(c));
+    markComponents.forEach((c) {
+      components.remove(c);
+    });
+
     //关闭流
     if (useGravity && !kIsWeb) _stream?.cancel();
   }
