@@ -4,7 +4,7 @@ import 'package:box2d_flame/box2d.dart';
 import 'package:flame/box2d/box2d_component.dart';
 import 'package:flame/palette.dart';
 
-import '../myGame.dart';
+import '../my_game.dart';
 
 List<Wall> createBoundaries(MyGame game, Box2DComponent box) {
   final Vector2 screenSize = Vector2(
@@ -35,9 +35,9 @@ class Wall extends BodyComponent {
   }
 
   @override
-  void renderPolygon(Canvas canvas, List<Offset> coordinates) {
-    dynamic startx = coordinates[0];
-    dynamic endx = coordinates[1];
+  void renderPolygon(Canvas canvas, List<Offset> points) {
+    dynamic startx = points[0];
+    dynamic endx = points[1];
     // startx = viewport.getWorldToScreen(Vector2(startx.dx, startx.dy));
     // endx = viewport.getWorldToScreen(Vector2(endx.dx, endx.dy));
     canvas.drawLine(startx, endx, paint);

@@ -1,11 +1,11 @@
+import 'package:fall_down/about/about_page.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 
-import '../myGame.dart';
+import '../my_game.dart';
 
 class Home extends StatefulWidget {
   final MyGame game;
-  Home(this.game);
+  const Home(this.game, {Key key}) : super(key: key);
   @override
   _HomeState createState() => _HomeState();
 }
@@ -18,31 +18,23 @@ class _HomeState extends State<Home> {
         body: GestureDetector(
           behavior: HitTestBehavior.translucent,
           onTap: null,
-          child: Container(
+          child: SizedBox(
               width: widget.game.screenSize.width,
               height: widget.game.screenSize.height,
               child: Column(
                 children: <Widget>[
-                  Expanded(flex: 2, child: SizedBox()),
-                  Text(
+                  const Expanded(flex: 2, child: SizedBox()),
+                  const Text(
                     '坠 落',
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 64,
                         fontWeight: FontWeight.bold),
                   ),
-                  Expanded(flex: 1, child: SizedBox()),
-                  // GestureDetector(
-                  //   onTap: widget.game.newGame,
-                  //   child: Image.asset(
-                  //     'assets/images/start.png',
-                  //     width: 128,
-                  //     height: 128,
-                  //   ),
-                  // ),
+                  const Expanded(flex: 1, child: SizedBox()),
                   GestureDetector(
                     onTap: widget.game.newGame,
-                    child: Text(
+                    child: const Text(
                       '开始游戏',
                       style: TextStyle(
                           color: Colors.white,
@@ -50,30 +42,29 @@ class _HomeState extends State<Home> {
                           fontWeight: FontWeight.bold),
                     ),
                   ),
-                  Expanded(flex: 1, child: SizedBox()),
+                  const Expanded(flex: 1, child: SizedBox()),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: <Widget>[
                       IconButton(
                         iconSize: 48,
-                        icon: Icon(
+                        icon: const Icon(
                           Icons.info,
                           color: Colors.white,
                           size: 48,
                         ),
-                        onPressed: () async{
+                        onPressed: () async {
                           //关于
-                          launchURL(String url) async {
-                            if (await canLaunch(url)) {
-                              await launch(url);
-                            }
-                          }
-                          await launchURL('http://v.idoo.top/web/fallDown/about.html');
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const AboutPage()),
+                          );
                         },
                       ),
                       IconButton(
                         iconSize: 48,
-                        icon: Icon(
+                        icon: const Icon(
                           Icons.settings,
                           color: Colors.white,
                           size: 48,
@@ -82,7 +73,7 @@ class _HomeState extends State<Home> {
                       )
                     ],
                   ),
-                  Expanded(flex: 1, child: SizedBox()),
+                  const Expanded(flex: 1, child: SizedBox()),
                 ],
               )),
         ));

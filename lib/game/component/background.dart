@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flame/components/component.dart';
 import 'package:flame/sprite.dart';
 
-import '../myGame.dart';
+import '../my_game.dart';
 
 class Background extends SpriteComponent {
 
@@ -12,8 +12,9 @@ class Background extends SpriteComponent {
     sprite = Sprite('bg.jpg');
   }
 
-  void resize(Size screenSize) {
-    width = screenSize.width;
-    height = screenSize.height;
+  @override
+  void resize(Size size) {
+    width = size.width;
+    height = size.height;
   }
 }

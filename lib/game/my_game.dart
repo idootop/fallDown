@@ -4,7 +4,7 @@ import 'dart:ui';
 import 'package:box2d_flame/box2d.dart';
 import 'package:fall_down/game/component/background.dart';
 import 'package:fall_down/game/component/ball.dart';
-import 'package:fall_down/game/component/deadLine.dart';
+import 'package:fall_down/game/component/dead_line.dart';
 import 'package:flame/anchor.dart';
 import 'package:flame/box2d/box2d_component.dart';
 import 'package:flame/box2d/box2d_game.dart';
@@ -15,7 +15,6 @@ import 'package:flame/game/game.dart';
 import 'package:flame/keyboard.dart';
 import 'package:flame/text_config.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sensors/sensors.dart';
@@ -23,9 +22,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supercharged/supercharged.dart';
 
 import 'component/ban.dart';
-import 'component/levelUp.dart';
+import 'component/level_up.dart';
 import 'component/wall.dart';
-import 'overlays/gameOver.dart';
+import 'overlays/game_over.dart';
 import 'overlays/home.dart';
 import 'overlays/pause.dart';
 import 'overlays/setting.dart';
@@ -209,24 +208,25 @@ class MyGame extends Box2DGame
     bans.clear();
     0
         .rangeTo(screenBansLength - 1)
+        .toList()
         .forEach((index) => addBan(tileSize * banHeight * index));
     add(ball);
     deadLine = DeadLine(this, box);
     add(deadLine);
 
     scoreText = TextComponent('$score',
-        config: TextConfig(color: Color(0xffffffff), fontSize: 16))
+        config: TextConfig(color: const Color(0xffffffff), fontSize: 16))
       ..anchor = Anchor.topCenter
       ..x = 32.0
       ..y = 32.0;
     coinText = TextComponent('✦ $coins',
-        config: TextConfig(color: Color(0xffffff00), fontSize: 16))
+        config: TextConfig(color: const Color(0xffffff00), fontSize: 16))
       ..anchor = Anchor.topCenter
       ..x = size.width / 2
       ..y = 32.0;
 
     pouseText = TextComponent('▐▐',
-        config: TextConfig(color: Color(0xffffffff), fontSize: 14))
+        config: TextConfig(color: const Color(0xffffffff), fontSize: 14))
       ..anchor = Anchor.topCenter
       ..x = size.width - 32
       ..y = 32.0;
@@ -238,23 +238,24 @@ class MyGame extends Box2DGame
     bestScore = prefs.getInt('bestScore') ?? 0;
     useGravity = prefs.getBool('useGravity') ?? false;
     if (useGravity && !kIsWeb) addSensor();
+    if (!kIsWeb && !Flame.bgm.isPlaying) Flame.bgm.play('bg.mp3');
   }
 
   @override
-  void update(double dt) {
+  void update(double t) {
+    if (bans.isEmpty) return;
     var oldFallDistance = fallDistance;
-    super.update(dt); //此处fallDistance被更新
+    super.update(t); //此处fallDistance被更新
     //清空屏幕之外的
     bans.where((b) => b.positionY < 0).toList().forEach((ban) {
       ban.remove(); //删除物理与视图对象
       bans.remove(ban); //删除暂储对象
     });
-    if (bans.length < 1) return;
+    if (bans.isEmpty) return;
     //添加
     double lastPositionY;
     while (bans.length < screenBansLength) {
-      if (lastPositionY == null)
-        lastPositionY = bans.last.positionY - topDistance;
+      lastPositionY ??= bans.last.positionY - topDistance;
       lastPositionY += tileSize * banHeight; //box的下一个位置
       addBan(lastPositionY); //添加一个
     }
@@ -320,12 +321,15 @@ class MyGame extends Box2DGame
 
   void killAll() {
     final markComponents = [];
-    box.components.forEach((c) => c is Box2DComponent ? null : box.remove(c));
-    components
-        .forEach((c) => c is Box2DComponent ? null : markComponents.add(c));
-    markComponents.forEach((c) {
+    for (var c in box.components) {
+      if (c is! Box2DComponent) box.remove(c);
+    }
+    for (var c in components) {
+      if (c is! Box2DComponent) markComponents.add(c);
+    }
+    for (var c in markComponents) {
       components.remove(c);
-    });
+    }
 
     //关闭流
     if (useGravity && !kIsWeb) _stream?.cancel();
@@ -344,19 +348,19 @@ class MyGame extends Box2DGame
   }
 
   @override
-  void onKeyEvent(e) {
+  void onKeyEvent(event) {
     if (paused || useGravity) return;
-    final bool isKeyDown = e is RawKeyDownEvent;
-    if (e.data.keyLabel == 'ArrowLeft') {
+    bool isKeyDown = event is RawKeyDownEvent;
+    if (event.data.keyLabel == 'ArrowLeft') {
       isKeyDown ? ball.startMoveLeft() : ball.stopMoveLeft();
     }
-    if (e.data.keyLabel == 'ArrowRight') {
+    if (event.data.keyLabel == 'ArrowRight') {
       isKeyDown ? ball.startMoveRight() : ball.stopMoveRight();
     }
   }
 
   @override
-  void onTapDown(_, TapDownDetails details) {
+  void onTapDown(pointerId, TapDownDetails details) {
     if (paused || useGravity) return;
     var p = pouseText.toRect().center;
     if ((details.globalPosition.dx - p.dx).abs() < 32 &&
@@ -372,7 +376,7 @@ class MyGame extends Box2DGame
   }
 
   @override
-  void onTapUp(_, TapUpDetails details) {
+  void onTapUp(pointerId, TapUpDetails details) {
     if (paused || useGravity) return;
     if (details.globalPosition.dx < screenSize.width / 2) {
       ball.stopMoveLeft();

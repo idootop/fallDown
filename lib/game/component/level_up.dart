@@ -3,20 +3,19 @@ import 'package:flame/box2d/box2d_component.dart';
 import 'package:flame/components/component.dart';
 import 'package:flame/sprite.dart';
 
-import '../myGame.dart';
+import '../my_game.dart';
 
-class DeadLine extends SpriteComponent {
+class LevelUp extends SpriteComponent {
   MyGame game;
   Box2DComponent box;
   double positionY = 0;
-  Sprite get coinSprite => Sprite('deadLine.png');
+  Sprite get levelUpSprite => Sprite('levelUp.png');
+  Sprite get newRecordUpSprite => Sprite('newRecord.png');
 
-  DeadLine(this.game, this.box) {
+  LevelUp(this.game, this.box) {
     width = game.screenSize.width;
-    height = game.screenSize.width / 20;
-    sprite = coinSprite;
-    // anchor = Anchor.center; //中部画图
-    // positonY = 0;
+    height = game.screenSize.width / 715 * 154;
+    sprite = levelUpSprite;
   }
 
   @override

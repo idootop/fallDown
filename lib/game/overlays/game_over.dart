@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '../myGame.dart';
+import '../my_game.dart';
 
 class GameOver extends StatefulWidget {
   final MyGame game;
-  GameOver(this.game);
+  const GameOver(this.game, {Key key}) : super(key: key);
   @override
   _GameOverState createState() => _GameOverState();
 }
@@ -17,13 +17,13 @@ class _GameOverState extends State<GameOver> {
         body: GestureDetector(
             behavior: HitTestBehavior.translucent,
             onTap: null,
-            child: Container(
+            child: SizedBox(
               width: widget.game.screenSize.width,
               height: widget.game.screenSize.height,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Expanded(flex: 2, child: SizedBox()),
+                  const Expanded(flex: 2, child: SizedBox()),
                   GestureDetector(
                     onTap: widget.game.setting,
                     child: Image.asset(
@@ -34,20 +34,20 @@ class _GameOverState extends State<GameOver> {
                   ),
                   Text(
                     '${widget.game.score}',
-                    style: TextStyle(
+                    style: const TextStyle(
                         color: Colors.blueAccent,
                         fontSize: 48,
                         fontWeight: FontWeight.bold),
                   ),
                   Text(
                     '✦ ${widget.game.coins}',
-                    style: TextStyle(
+                    style: const TextStyle(
                         color: Colors.yellow,
                         fontSize: 32,
                         fontWeight: FontWeight.bold),
                   ),
                   widget.game.bestScore < 1
-                      ? SizedBox()
+                      ? const SizedBox()
                       : GestureDetector(
                           onTap: widget.game.setting,
                           child: Image.asset(
@@ -57,21 +57,21 @@ class _GameOverState extends State<GameOver> {
                           ),
                         ),
                   widget.game.bestScore < 1
-                      ? SizedBox()
+                      ? const SizedBox()
                       : Text(
                           '${widget.game.bestScore}',
-                          style: TextStyle(
+                          style: const TextStyle(
                               color: Colors.purpleAccent,
                               fontSize: 48,
                               fontWeight: FontWeight.bold),
                         ),
-                  Expanded(flex: 2, child: SizedBox()),
+                  const Expanded(flex: 2, child: SizedBox()),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: <Widget>[
                       IconButton(
                         iconSize: 64,
-                        icon: Icon(
+                        icon: const Icon(
                           Icons.home,
                           color: Colors.white,
                           size: 64,
@@ -80,7 +80,7 @@ class _GameOverState extends State<GameOver> {
                       ),
                       IconButton(
                         iconSize: 64,
-                        icon: Icon(
+                        icon: const Icon(
                           Icons.refresh,
                           color: Colors.white,
                           size: 64,
@@ -89,7 +89,7 @@ class _GameOverState extends State<GameOver> {
                       ),
                     ],
                   ),
-                  Expanded(flex: 1, child: SizedBox()),
+                  const Expanded(flex: 1, child: SizedBox()),
                 ],
               ),
             )));

@@ -10,7 +10,7 @@ import 'package:flame/components/mixins/resizable.dart';
 import 'package:flame/components/mixins/tapable.dart';
 import 'package:supercharged/supercharged.dart';
 
-import '../myGame.dart';
+import '../my_game.dart';
 import 'box.dart';
 import 'coin.dart';
 
@@ -24,46 +24,48 @@ class Ban extends PositionComponent
   double positionY = 0;
 
   Ban(this.game, Box2DComponent box, double distance) {
-    myBan(box, distance);
+    generateBan(box, distance);
   }
 
   @override
-  void update(double dt) {
-    super.update(dt);
-    var body = boxs.firstWhere((e) => e is Box).body; //最后一行的box
-    positionY = body.viewport.getWorldToScreen(body.center).y;
+  void update(double t) {
+    super.update(t);
+    if (boxs.any((e) => e != null)) {
+      var body = boxs.firstWhere((e) => e is Box).body; //最后一行的box
+      positionY = body.viewport.getWorldToScreen(body.center).y;
+    }
   }
 
   randomListItem(List temp) =>
-      temp.length < 1 ? null : temp[Random().nextInt(temp.length)];
+      temp.isEmpty ? null : temp[Random().nextInt(temp.length)];
 
   int listDistance(List<int> positions, int position) {
     int distance;
-    positions.forEach((p) {
+    for (var p in positions) {
       int tempDistance = (p - position).abs();
       if (distance == null || tempDistance < distance) distance = tempDistance;
-    });
-    return distance == null ? 0 : distance;
+    }
+    return distance ?? 0;
   }
 
   int closestIndex(List<int> positions, int position) {
     int distance, closestIndex;
-    positions.forEach((p) {
+    for (var p in positions) {
       int tempDistance = (p - position).abs();
       if (distance == null || tempDistance < distance) {
         distance = tempDistance;
         closestIndex = p;
       }
-    });
+    }
     return closestIndex;
   }
 
-  myBan(Box2DComponent box, double p) {
+  /// 创建一条障碍
+  generateBan(Box2DComponent box, double p) {
     List<int> blankPositions = [];
     double distance = p + game.topDistance;
-    //创建一条障碍
-    boxs = List<Box>()..length = game.boxLength;
-    coins = List<Coin>()..length = game.boxLength;
+    boxs = <Box>[]..length = game.boxLength;
+    coins = <Coin>[]..length = game.boxLength;
     if (p == 0) {
       //第一个障碍只有中间一个缺口
       blankPositions = [((game.boxLength - 1) / 2).round()];
@@ -71,7 +73,7 @@ class Ban extends PositionComponent
       //生成随机空缺数
       int blankCounts = Random().nextInt(game.blankLength - 1) + 1; //随机空缺数
       List<int> positions = 0.rangeTo(game.boxLength - 1).toList(); //所有位置
-      List(blankCounts).forEach((e) {
+      for (var _ in List.generate(blankCounts, (_) => null)) {
         //随机生成空缺位置
         int blankPosition = randomListItem(positions);
         var closest = closestIndex(blankPositions, blankPosition);
@@ -79,8 +81,10 @@ class Ban extends PositionComponent
             (blankPosition > closest && closest - blankPosition > 3) ||
             (blankPosition < closest &&
                 closest - blankPosition > 3 + game.blankLength);
-        if (blankPosition == null || (blankPositions.length > 0 && !safe))
-          return; //没有剩余的可行位置了
+        if (blankPosition == null || (blankPositions.isNotEmpty && !safe)) {
+          //没有剩余的可行位置了
+          break;
+        }
         for (int tempPosition
             in blankPosition.rangeTo(blankPosition + game.blankSize - 1)) {
           if (tempPosition > -1 && tempPosition < game.boxLength) {
@@ -97,7 +101,7 @@ class Ban extends PositionComponent
             }
           }
         }
-      });
+      }
     }
     //填充空缺位置左右两边
     for (int blank in blankPositions) {
@@ -130,7 +134,7 @@ class Ban extends PositionComponent
     if (p != 0) {
       //生成随机空缺数
       int coinCounts = Random().nextInt(game.blankLength - 1); //随机空缺数
-      List(coinCounts).forEach((e) {
+      for (var _ in List.generate(coinCounts, (_) => null)) {
         //随机生成空缺位置
         int coinPosition = randomListItem(boxPosition);
         boxPosition.remove(coinPosition); //空缺位置
@@ -139,11 +143,15 @@ class Ban extends PositionComponent
             box,
             Vector2(game.tileSize * coinPosition, distance - game.tileSize),
             Size(game.tileSize, game.tileSize));
-      });
+      }
     }
     //添加组件
-    boxs.forEach((c) => c == null ? 0 : add(c));
-    coins.forEach((c) => c == null ? 0 : add(c));
+    for (var c in boxs) {
+      if (c != null) add(c);
+    }
+    for (var c in coins) {
+      if (c != null) add(c);
+    }
     var body = boxs.firstWhere((e) => e is Box).body; //最后一行的box
     positionY = body.viewport.getWorldToScreen(body.center).y;
   }
@@ -153,6 +161,7 @@ class Ban extends PositionComponent
   }
 
   /// 判断是否可以被移除了
+  @override
   bool destroy() {
     return killed;
   }

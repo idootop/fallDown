@@ -6,7 +6,7 @@ import 'package:flame/box2d/box2d_component.dart';
 import 'package:flame/components/component.dart';
 import 'package:flame/sprite.dart';
 
-import '../myGame.dart';
+import '../my_game.dart';
 
 class Coin extends SpriteComponent {
   Size size;
@@ -27,6 +27,7 @@ class Coin extends SpriteComponent {
   }
 
   /// 判断是否可以被移除了
+  @override
   bool destroy() {
     return killed;
   }

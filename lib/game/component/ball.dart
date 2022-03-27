@@ -7,7 +7,7 @@ import 'package:flame/components/component.dart';
 import 'package:flame/palette.dart';
 import 'package:flame/sprite.dart';
 
-import '../myGame.dart';
+import '../my_game.dart';
 
 class Ball extends SpriteComponent {
   Size size;

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '../myGame.dart';
+import '../my_game.dart';
 
 class PauseOverlay extends StatefulWidget {
   final MyGame game;
-  PauseOverlay(this.game);
+  const PauseOverlay(this.game, {Key key}) : super(key: key);
   @override
   _PauseOverlayState createState() => _PauseOverlayState();
 }
@@ -17,13 +17,13 @@ class _PauseOverlayState extends State<PauseOverlay> {
         body: GestureDetector(
             behavior: HitTestBehavior.translucent,
             onTap: widget.game.pause,
-            child: Container(
+            child: SizedBox(
               width: widget.game.screenSize.width,
               height: widget.game.screenSize.height,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
-                  Text(
+                  const Text(
                     '游戏已暂停',
                     style: TextStyle(
                         color: Colors.white,
@@ -32,7 +32,7 @@ class _PauseOverlayState extends State<PauseOverlay> {
                   ),
                   GestureDetector(
                     onTap: widget.game.pause,
-                    child: Text('继续',
+                    child: const Text('继续',
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: 32,
@@ -41,7 +41,7 @@ class _PauseOverlayState extends State<PauseOverlay> {
                   ),
                   GestureDetector(
                     onTap: widget.game.newHome,
-                    child: Text('回主页',
+                    child: const Text('回主页',
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: 32,

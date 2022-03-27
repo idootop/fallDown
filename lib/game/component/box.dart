@@ -8,7 +8,7 @@ import 'package:flame/sprite.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 
-import '../myGame.dart';
+import '../my_game.dart';
 
 class Box extends SpriteComponent {
   Size size;
@@ -45,6 +45,7 @@ class Box extends SpriteComponent {
         game, box, position + Vector2(width / 2, height / 2), size); //物理实体
   }
 
+  @override
   Rect toRect() => Rect.fromLTWH(x - anchor.relativePosition.dx * width,
       y - anchor.relativePosition.dy * height, width, height);
 

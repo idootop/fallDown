@@ -4,24 +4,26 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'game/myGame.dart';
+import 'game/my_game.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  runApp(
+    const MaterialApp(
+      title: '坠落',
+      home: MainPage(),
+    ),
+  );
   //全屏&竖屏
   if (!kIsWeb) {
     await Flame.util.fullScreen();
     await Flame.util.setOrientation(DeviceOrientation.portraitUp);
   }
-  runApp(
-    MaterialApp(
-      title: '坠落',
-      home: MainPage(),
-    ),
-  );
 }
 
 class MainPage extends StatefulWidget {
+  const MainPage({Key key}) : super(key: key);
+
   @override
   _MainPageState createState() => _MainPageState();
 }
@@ -37,9 +39,9 @@ class _MainPageState extends State<MainPage> {
     Future.delayed(Duration.zero).then((_) async {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => SplashScreenGame()),
+        MaterialPageRoute(builder: (context) => const SplashScreenGame()),
       ).then((value) {
-        if (!kIsWeb && !Flame.bgm.isPlaying) Flame.bgm.play('bg.mp3');
+        // if (!kIsWeb && !Flame.bgm.isPlaying) Flame.bgm.play('bg.mp3');
       });
       await init();
     });
@@ -62,14 +64,15 @@ class _MainPageState extends State<MainPage> {
       'setting.png',
       'done.png'
     ]); //加载贴图
-    if (!kIsWeb)
+    if (!kIsWeb) {
       await Flame.bgm.loadAll([
         'bg.mp3',
         'coin.mp3',
         'catchUp.mp3',
         'gameOver.mp3',
         'newRecord.mp3'
-      ]); //加载音频
+      ]);
+    } //加载音频
     await game.initialize();
     setState(() {
       start = true;
@@ -84,7 +87,7 @@ class _MainPageState extends State<MainPage> {
     game.pauseEngine();
     game = MyGame(box, newGame: newGame, newHome: newHome);
     await game.initialize();
-    Flame.bgm.play('bg.mp3');
+    // Flame.bgm.play('bg.mp3');
     setState(() {
       start = true;
     });
@@ -96,13 +99,13 @@ class _MainPageState extends State<MainPage> {
     });
     game.killAll();
     game.pauseEngine();
-    box.components.forEach((e) {
+    for (var e in box.components) {
       box.remove(e);
-    });
+    }
     box = MyBox2D();
     game = MyGame(box, newGame: newGame, newHome: newHome);
     await game.start();
-    if (!Flame.bgm.isPlaying) Flame.bgm.play('bg.mp3');
+    // if (!Flame.bgm.isPlaying) Flame.bgm.play('bg.mp3');
     setState(() {
       start = true;
     });
@@ -113,12 +116,14 @@ class _MainPageState extends State<MainPage> {
     return WillPopScope(
         onWillPop: game?.onWillPop,
         child: Scaffold(
-            backgroundColor: Color(0xff000000),
+            backgroundColor: const Color(0xff000000),
             body: start ? game.widget : Container()));
   }
 }
 
 class SplashScreenGame extends StatefulWidget {
+  const SplashScreenGame({Key key}) : super(key: key);
+
   @override
   _SplashScreenGameState createState() => _SplashScreenGameState();
 }
