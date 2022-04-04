@@ -9,7 +9,7 @@
     </queries>
 
    <application
-        android:label="fall_down"
+        android:label="坠落"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

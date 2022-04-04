@@ -1,14 +1,6 @@
-<p align="center">
-<img width="128" src="https://i.loli.net/2020/07/28/lvt5I7YWODBFH9A.png" >
-</p>
-<p align="center">
-坠落
-<p>
-<p align="center">
-<img src="https://forthebadge.com/images/badges/built-with-love.svg">
-<p>
-
 # 简介 
+
+![](screenshots/play.gif)
 
 FallDown is a game developed using Flutter+Flame+Box2D.
 
@@ -18,8 +10,9 @@ FallDown is a game developed using Flutter+Flame+Box2D.
 
 # 预览
 
-| ![](screenshots/1.png)  |  ![](screenshots/2.png)  |  ![](screenshots/3.png) |  ![](screenshots/4.png)  |
-| :------------: | :------------: | :------------: | :------------: |
+| ![](screenshots/1.png)  |  ![](screenshots/2.png)  |
+| :------------: | :------------: |
+|  ![](screenshots/3.png) |  ![](screenshots/4.png)  |
 
 
 # 在线预览
@@ -41,6 +34,10 @@ flutter build apk --release
 ```
 
 PS：亦可支持iOS，Mac，Windows，Linux端，请自行打包
+
+# 相关文章
+
+[趣学 Flutter「小游戏」：坠落](https://juejin.cn/post/7082695284278427656)
 
 # 免责声明
 

@@ -36,28 +36,21 @@ class Ban extends PositionComponent
     }
   }
 
-  randomListItem(List temp) =>
-      temp.isEmpty ? null : temp[Random().nextInt(temp.length)];
+  /// 随机取数组中元素
+  randomListItem(List items) =>
+      items.isEmpty ? null : items[Random().nextInt(items.length)];
 
-  int listDistance(List<int> positions, int position) {
-    int distance;
+  /// 取 positions 中距离 target 最近的 positon
+  int closestPosition(List<int> positions, int target) {
+    int distance, closestPosition;
     for (var p in positions) {
-      int tempDistance = (p - position).abs();
-      if (distance == null || tempDistance < distance) distance = tempDistance;
-    }
-    return distance ?? 0;
-  }
-
-  int closestIndex(List<int> positions, int position) {
-    int distance, closestIndex;
-    for (var p in positions) {
-      int tempDistance = (p - position).abs();
+      int tempDistance = (p - target).abs();
       if (distance == null || tempDistance < distance) {
         distance = tempDistance;
-        closestIndex = p;
+        closestPosition = p;
       }
     }
-    return closestIndex;
+    return closestPosition;
   }
 
   /// 创建一条障碍
@@ -76,7 +69,7 @@ class Ban extends PositionComponent
       for (var _ in List.generate(blankCounts, (_) => null)) {
         //随机生成空缺位置
         int blankPosition = randomListItem(positions);
-        var closest = closestIndex(blankPositions, blankPosition);
+        var closest = closestPosition(blankPositions, blankPosition);
         var safe = closest == null ||
             (blankPosition > closest && closest - blankPosition > 3) ||
             (blankPosition < closest &&
