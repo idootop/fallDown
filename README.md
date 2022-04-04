@@ -1,6 +1,7 @@
-# 简介 
 
 ![](screenshots/play.gif)
+
+# 简介 
 
 FallDown is a game developed using Flutter+Flame+Box2D.
 
