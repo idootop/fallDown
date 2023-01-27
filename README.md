@@ -18,9 +18,7 @@ FallDown is a game developed using Flutter+Flame+Box2D.
 
 # 在线预览
 
-网页版：http://v.idoo.top/web/fallDown
-
-安卓版：[坠落.apk](release/坠落.apk)
+https://fall.xbox.work
 
 # 开发
 
